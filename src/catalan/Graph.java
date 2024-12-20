@@ -13,6 +13,10 @@ public class Graph {
         this.edges = new HashMap<>();
     }
 
+    private Graph(HashMap<Vertex, ArrayList> edges) {
+        this.edges = edges;
+    }
+
     public boolean readGraphFromFile(String filepath){
 
         ArrayList<String[]> lines = new ArrayList<>();
@@ -101,4 +105,24 @@ public class Graph {
         }
         return false;
     }
+
+    public ArrayList<Vertex> getNeighbours(Vertex u){
+        return new ArrayList<>(edges.get(u));
+    }
+
+    public Graph collapseNeighbours(Vertex u){
+        Graph g = new Graph(this.edges);
+        ArrayList<Vertex> neighbours = g.getNeighbours(u);
+
+        return g;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Graph graph = (Graph) o;
+        return Objects.equals(edges, graph.edges);
+    }
+
+
 }
