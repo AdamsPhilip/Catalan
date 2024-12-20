@@ -1,19 +1,17 @@
 package catalan;
 
-import java.lang.reflect.Array;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Graph {
-    private HashMap<Vertex, ArrayList> edges;
+    private HashMap<Vertex, ArrayList<Vertex>> edges;
 
     public Graph() {
         this.edges = new HashMap<>();
     }
 
-    private Graph(HashMap<Vertex, ArrayList> edges) {
+    private Graph(HashMap<Vertex, ArrayList<Vertex>> edges) {
         this.edges = edges;
     }
 
@@ -25,14 +23,11 @@ public class Graph {
                     .filter(line -> !line.isEmpty())
                     .map(line -> line.split(" "))
                     .filter(arr -> arr.length > 2)
-                    .forEach(line -> lines.add(line));
+                    .forEach(lines::add);
         } catch (Exception e) { return false;
 
         }
-        if (createVertex(lines) && createEdge(lines)){
-            return true;
-        }
-        return false;
+        return createVertex(lines) && createEdge(lines);
     }
 
     //Lege die Knoten aus der GML datei an
@@ -72,20 +67,25 @@ public class Graph {
         }
     }
 
-    // Neue Kante setzen mit zwei Vertex-Objekten
-    public void setEdges(Vertex v1, Vertex v2){
-        for (Vertex v : edges.keySet()) {
-            if (v1.equals(v)) {
-                edges.get(v).add(v2);
+    // Neue Kante setzen mit zwei Vertex-Objekten zum Kollabieren
+    public void setEdges(Vertex vColl, Vertex vRemove){
+        for (Vertex v : this.edges.keySet()) {
+            if (vColl.equals(v)) {
+                for (Vertex v4 : getNeighbours(vRemove)){
+                if(!this.edges.get(v).contains(v4) && !v4.equals(vColl) && !v4.equals(vRemove)) {
+                    this.edges.get(v).add(v4);
+                    this.edges.get(v4).add(vColl);
+                }
+
+                }
+
             }
-            if (v2.equals(v)) {
-                edges.get(v).add(v1);
-            }
+            this.edges.get(v).remove(vRemove); //entfernt alle Kanten zu den entfernten knoten
         }
     }
 
     public void printGraph(){
-        this.edges.entrySet().stream().forEach(System.out::println);
+        this.edges.entrySet().forEach(System.out::println);
     }
 
     public int numVertices(){
@@ -98,23 +98,30 @@ public class Graph {
 
     public Boolean areNeighbours(Vertex u, Vertex v){
         for (Vertex v2 : edges.keySet()) {
-            if (v2.equals(u)){
-                this.edges.get(v2).contains(v);
-                return true;
+            if (v2.equals(u) && this.edges.get(v2).contains(v)) {
+                    return true;
             }
         }
         return false;
     }
 
     public ArrayList<Vertex> getNeighbours(Vertex u){
-        return new ArrayList<>(edges.get(u));
+        return new ArrayList<Vertex>(edges.get(u));
     }
 
     public Graph collapseNeighbours(Vertex u){
         Graph g = new Graph(this.edges);
         ArrayList<Vertex> neighbours = g.getNeighbours(u);
+        for (Vertex v : neighbours) {
+            g.setEdges(u,v);
+            g.removeVertex(v);
+        }
 
         return g;
+    }
+
+    private void removeVertex(Vertex v){
+        this.edges.remove(v);
     }
 
     @Override
@@ -123,6 +130,5 @@ public class Graph {
         Graph graph = (Graph) o;
         return Objects.equals(edges, graph.edges);
     }
-
-
+    
 }
