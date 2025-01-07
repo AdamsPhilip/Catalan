@@ -4,14 +4,14 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
 
-public class Graph {
+public class Graph implements Cloneable{
     private HashMap<Vertex, ArrayList<Vertex>> edges;
 
     public Graph() {
         this.edges = new HashMap<>();
     }
 
-    private Graph(HashMap<Vertex, ArrayList<Vertex>> edges) {
+    public Graph(HashMap<Vertex, ArrayList<Vertex>> edges) {
         this.edges = edges;
     }
 
@@ -22,7 +22,7 @@ public class Graph {
             Files.lines(Paths.get(filepath))
                     .filter(line -> !line.isEmpty())
                     .map(line -> line.split(" "))
-                    .filter(arr -> arr.length > 2)
+                    .filter(arr -> arr.length > 2) // sortiert die erste Zeile der Datei: "graph [" aus
                     .forEach(lines::add);
         } catch (Exception e) { return false;
 
@@ -41,7 +41,6 @@ public class Graph {
     private Boolean createEdge(ArrayList<String[]> gmlData){
         for(int i = 0; i < gmlData.size(); i++) {
             String[] line = gmlData.get(i);
-            //  System.out.println(Arrays.toString(line));
             String source = line[0].strip();
 
             if (source.equals("edge")) {
@@ -68,7 +67,7 @@ public class Graph {
     }
 
     // Neue Kante setzen mit zwei Vertex-Objekten zum Kollabieren
-    public void setEdges(Vertex vColl, Vertex vRemove){
+    public void setEdge(Vertex vColl, Vertex vRemove){
         for (Vertex v : this.edges.keySet()) {
             if (vColl.equals(v)) {
                 for (Vertex v4 : getNeighbours(vRemove)){
@@ -84,9 +83,9 @@ public class Graph {
         }
     }
 
-    public void printGraph(){
-        this.edges.entrySet().forEach(System.out::println);
-    }
+                            public void printGraph(){
+                                this.edges.entrySet().forEach(System.out::println);
+                            }
 
     public int numVertices(){
         return edges.size();
@@ -96,28 +95,27 @@ public class Graph {
         return new ArrayList<>(edges.keySet());
     }
 
-    public Boolean areNeighbours(Vertex u, Vertex v){
-        for (Vertex v2 : edges.keySet()) {
-            if (v2.equals(u) && this.edges.get(v2).contains(v)) {
-                return true;
-            }
-        }
-        return false;
-    }
+                    public Boolean areNeighbours(Vertex u, Vertex v){
+                        for (Vertex v2 : edges.keySet()) {
+                            if (v2.equals(u) && this.edges.get(v2).contains(v)) {
+                                return true;
+                            }
+                        }
+                        return false;
+                    }
 
     public ArrayList<Vertex> getNeighbours(Vertex u){
-        return new ArrayList<Vertex>(edges.get(u));
+        return new ArrayList<>(edges.get(u));
     }
 
     public Graph collapseNeighbours(Vertex u){
-        Graph g = new Graph(this.edges);
-        ArrayList<Vertex> neighbours = g.getNeighbours(u);
+        ArrayList<Vertex> neighbours = getNeighbours(u);
         for (Vertex v : neighbours) {
-            g.setEdges(u,v);
-            g.removeVertex(v);
+            setEdge(u,v);
+            removeVertex(v);
         }
 
-        return g;
+        return Graph.this;
     }
 
     private void removeVertex(Vertex v){
@@ -129,6 +127,21 @@ public class Graph {
         if (o == null || getClass() != o.getClass()) return false;
         Graph graph = (Graph) o;
         return Objects.equals(edges, graph.edges);
+    }
+
+                                    public HashMap<Vertex, ArrayList<Vertex>> getEdges() {
+                                        return new HashMap<>(edges);
+                                    }
+
+    @Override
+    public Graph clone() throws CloneNotSupportedException{
+        Graph g = (Graph) super.clone();
+        g.edges = new HashMap<>();
+        for (Vertex v : this.edges.keySet()) {
+            g.edges.put(new Vertex(v.getId()), new ArrayList<>(this.edges.get(v)));
+
+        }
+        return g;
     }
 
 }
