@@ -33,7 +33,7 @@ public class Move {
 
     @Override
     public String toString() {
-        return "select vertex " + this.SelectedVertex.getId();
+        return "select vertex " + this.SelectedVertex.getID();
     }
 
 }

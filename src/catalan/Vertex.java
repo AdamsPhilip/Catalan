@@ -9,8 +9,8 @@ public class Vertex {
         this.id = id;
     }
 
-    public int getId() {
-        return id;
+    public int getID() {
+        return this.id;
     }
 
     @Override

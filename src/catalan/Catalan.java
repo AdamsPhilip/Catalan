@@ -58,15 +58,15 @@ public class Catalan {
         ArrayList<Move> bestMoves = moves.get(0);
         for (int i = 1; i < moves.size(); i++) {
             for (int j = 0; j < moves.get(i).size(); j++) {
-                if (moves.get(i).get(j).getSelectedVertex().getId() == bestMoves.get(j).getSelectedVertex().getId()) {
+                if (moves.get(i).get(j).getSelectedVertex().getID() == bestMoves.get(j).getSelectedVertex().getID()) {
                     continue;
                 }
-                if (moves.get(i).get(j).getSelectedVertex().getId() < bestMoves.get(j).getSelectedVertex().getId()) {
+                if (moves.get(i).get(j).getSelectedVertex().getID() < bestMoves.get(j).getSelectedVertex().getID()) {
                     bestMoves = moves.get(i);
                     break;
                 }
 
-                if (moves.get(i).get(j).getSelectedVertex().getId() > bestMoves.get(j).getSelectedVertex().getId()) {
+                if (moves.get(i).get(j).getSelectedVertex().getID() > bestMoves.get(j).getSelectedVertex().getID()) {
                     break;
                 }
             }

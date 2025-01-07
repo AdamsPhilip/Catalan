@@ -57,10 +57,10 @@ public class Graph implements Cloneable{
     // Neue Kante setzen mit zwei Integer
     public void setEdge(int v1, int v2){
         for (Vertex v : edges.keySet()) {
-            if (v1 == v.getId()) {
+            if (v1 == v.getID()) {
                 edges.get(v).add(new Vertex(v2));
             }
-            if (v2 == v.getId()) {
+            if (v2 == v.getID()) {
                 edges.get(v).add(new Vertex(v1));
             }
         }
@@ -138,7 +138,7 @@ public class Graph implements Cloneable{
         Graph g = (Graph) super.clone();
         g.edges = new HashMap<>();
         for (Vertex v : this.edges.keySet()) {
-            g.edges.put(new Vertex(v.getId()), new ArrayList<>(this.edges.get(v)));
+            g.edges.put(new Vertex(v.getID()), new ArrayList<>(this.edges.get(v)));
 
         }
         return g;
