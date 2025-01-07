@@ -57,10 +57,7 @@ public class Catalan {
         return graphClone;
     }*/
 
-    public ArrayList<Move> sort(ArrayList<ArrayList<Move>> moves) throws UnsolvableGameException {
-        if (moves.size() == 0) {
-            throw new UnsolvableGameException("Graph nicht lösbar");
-        }
+    public ArrayList<Move> sort(ArrayList<ArrayList<Move>> moves) {
         ArrayList<Move> bestMoves = moves.get(0);
         for (int i = 1; i < moves.size(); i++) {
             for (int j = 0; j < moves.get(i).size(); j++) {
