@@ -5,14 +5,16 @@ import java.util.ArrayList;
 public class Catalan {
 
     private ArrayList<ArrayList<Move>> moves;
+    private final String path;
 
-    public Catalan() {
+    public Catalan(String path) {
         this.moves = new ArrayList<>();
+        this.path = path;
     }
 
-    public ArrayList<Move> solve(String path) {
+    public ArrayList<Move> solve() {
         Graph graph = new Graph();
-        graph.readGraphFromFile(path);
+        graph.readGraphFromFile(this.path);
         makeMove(new ArrayList<>(), graph);
         return sort(this.moves);
     }
@@ -81,7 +83,7 @@ public class Catalan {
     public static void main(String[] args) {
         //Catalan catalan = new Catalan();
         // System.out.println("Solution \n=============\n" + new Catalan().solve("/home/philip/Dokumente/Studium/39-Inf-PP/Catalan/Code2/gml-files/level_56.gml"));
-        System.out.println("\nSolution by Philip Adams \n=============\n" + new Catalan().solve(args[0]));
+        System.out.println("\nSolution by Philip Adams \n=============\n" + new Catalan(args[0]).solve());
        // System.out.println("Ways to solve: " + catalan.movesSize());
                 // Startbar über Terminal: cd catalan (package): java -cp . catalan.Catalan /home/philip/Dokumente/Studium/39-Inf-PP/Catalan/Code2/gml-files/level_56.gml
     }
