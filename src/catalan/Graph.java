@@ -15,7 +15,7 @@ public class Graph implements Cloneable{
         this.edges = edges;
     }
 
-    public boolean readGraphFromFile(String filepath) throws UnsolvableGameException {
+    public boolean readGraphFromFile(String filepath){
 
         ArrayList<String[]> lines = new ArrayList<>();
         try {
@@ -27,8 +27,6 @@ public class Graph implements Cloneable{
         } catch (Exception e) { return false;
 
         }
-        if (this.edges.size() % 3  != 1)
-            throw new UnsolvableGameException("Graph ist durch die anzahl an Knoten nicht lösbar!");
         return createVertex(lines) && createEdge(lines);
     }
 
