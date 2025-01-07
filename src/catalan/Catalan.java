@@ -16,6 +16,9 @@ public class Catalan {
         Graph graph = new Graph();
         graph.readGraphFromFile(this.path);
         makeMove(new ArrayList<>(), graph);
+        if (this.moves.isEmpty()) {
+            throw new UnsolvableGameException("Graph nicht lösbar");
+        }
         return sort(this.moves);
     }
 
