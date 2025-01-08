@@ -21,6 +21,7 @@ public class Graph implements Cloneable{
         try {
             Files.lines(Paths.get(filepath))
                     .filter(line -> !line.isEmpty())
+                    .map(String::strip)
                     .map(line -> line.split(" "))
                     .filter(arr -> arr.length > 2) // sortiert die erste Zeile der Datei: "graph [" aus
                     .forEach(lines::add);
@@ -142,6 +143,14 @@ public class Graph implements Cloneable{
 
         }
         return g;
+    }
+
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+        for (Vertex v : this.edges.keySet()) {
+            sb.append(v.toString()).append(this.getNeighbours(v)).append("\n");
+        }
+        return sb.toString();
     }
 
 }
