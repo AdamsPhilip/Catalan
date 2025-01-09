@@ -15,7 +15,7 @@ public class Catalan {
     public ArrayList<Move> solve() throws UnsolvableGameException {
         Graph graph = new Graph();
         if (!graph.readGraphFromFile(this.path)){
-            throw new ExceptionInInitializerError("Graph kann nicht gelesen werden");
+            throw new UnsolvableGameException("Graph kann nicht gelesen werden");
         }
         testGraphForSolve(graph); // 1. Test auf lösbarkeit
         doNextMove(new ArrayList<>(), graph);
