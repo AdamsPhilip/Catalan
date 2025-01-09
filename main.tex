@@ -1,75 +1,57 @@
-\documentclass{article}
-\usepackage{graphicx} % Required for inserting images
-\usepackage{hyperref}
-
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[german]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\author{Philip Adams}
 \title{Catalan Programming Assignment: \\Written Report}
-\author{Your Name}
+\author{Philip Adams}
 
 \begin{document}
 
 \maketitle
 
 \section{Introduction}
-Introduce the problem you are solving here. Assume the audience has no background knowledge of Catalan.
-
-\subsection{Introduction to Latex -- delete this when submitting}
-Latex is a programming-inspired text editor. Write your text using Latex commands and upon compilation, Latex will automatically format it prettily for you. Here are some examples and guidelines of things you can do in Latex.
-
-In order to begin a new paragraph, you must have two new lines. You can also use \\ to force a new line. If you begin a new paragraph normally, it will automatically be indented for you.
-
-You can style mathematical equations $x+2=y$ directly in-line. You can \textbf{bold} and \textit{italicize} words, and write them in \texttt{code font}. Latex uses separate apostrophes for left- and right-facing apostrophes. The regular tick ' creates a normal apostrophe, while the backtick ` will create an opposite-facing apostrophe. You can add links: \url{https://www.baeldung.com/java-generics}.
-
-You can create a table using the `tabular' environment.
-
-\begin{center}
-\begin{tabular}{|c|c|} 
- \hline
- Header A & Header B \\
- \hline
- \hline
- A1 & B1 \\ 
- \hline
- A2 & B2 \\ 
- \hline
- A3 & B3 \\ 
- \hline
- A4 & B4 \\ 
- \hline
-\end{tabular}
-\end{center}
-
-You can write lists using the `itemize' environment.
-
-\begin{itemize}
-    \item Here is a list point
-    \item Here is another one
-\end{itemize}
+Catalen ist ein Spiel, wo es darum geht einen gegeben Graphen, durch Löschen von Knoten, zu lösen. Man bekommt zu beginn einen Graphen mit nummerierten Knoten ($|\{Knoten\}| \equiv \,1\, mod\, 3$) mit definierten ungerichteten Kanten als Verbindungen zwischen den Knoten. Als Spiele kann man nur Knoten zusammenlegen wenn er genau drei Nachbarn hat. Wenn man vier Knoten zusammenlegt, werden alle Nachbarknoten, des Zentralen, gelöscht und ihre Verbindungen werden auf den Zentralen Knoten übertragen. Dadurch kann man das Ziel, nur noch einen Knoten zu haben, je nach Graph, auf verschiedenen Wegen erreichen, oder in Situationen kommen wo der Graph unlösbar wird.
 
 \section{Overview of Classes}
 
 \subsection{Vertex}
-Introduce and discuss your implementation of the Vertex class.
+In der Vertex-Klasse habe ich bei der Implementierung als Klassenparameter nur  die ID des Knoten als privat und final Parameter implementiert, da im Verlauf des Spieles kein Knoten verändert werden soll, sondern nur Knoten gelöscht werden. Darüber hinaus habe ich noch eine die \texttt{quals()} und \texttt{hashCode()} Funktionen überschrieben da ich später um Verlauf des Programmes sowohl Vertex-Objekte, als auch in eine Hash-Map nach dem Hash-Code vergleichen möchte. Die \texttt{toString()} Methode hier soll teil der Finalen ausgabe des Programms sein.
 
 \subsection{Graph}
-Introduce and discuss your implementation of the Graph class.
+Zu Beginn der Graph-Klasse stand die Frage, wie ich den Graph als leicht zu veränderndes, gut auszulesendes und effiziert zu skalierendes Objekt speichere. Ich habe mich hier für eine HashMap mit dem Inhalt: HashMap<Vertex, ArrayList<Vertex>> entschieden, da ich in dieser effizient nach Knoten suchen kann, um ihre Nachbarn zu erhalten. Die Keys stellen die Knoten dar und die Values die Kanten, dafür nutze ich eine ArrayList mit Vertex-Objekten um die akt. Verbindungen darzustellen. Darüber hinaus kann ich die ArrayList, mit den Nachbarn gut bearbeiten, und durch die in der Vertex-Klasse implementierten Vergleichsfunktionen sicher sowohl die Keys als auch die Vertex-Objekte in den Listen vergleichen. Um den Graph aus der GML-Datei einzulesen erstelle ich zuerst in der \texttt{readGraphFromFile()} eine ArrayList mit String[] Elementen, wo jeder String[ ] eine Zeile der Datei mit gestrippten, gesplitteten Elememten enthält. Diese ArrayList verwende ich in den Hilfsmethoden \texttt{createVertex(ArrayList<String[ ]>)} und \texttt{createEdge(ArrayList<String[ ]>)} die Knoten und Kanten in der HashMap zu erzeugen. Als weitere besonderheit nutzte ich in der Graph-Klasse das Interface \glqq Cloneable\grqq{} um die Methode \texttt{clone()} zu überschreiben. Dies ist nötig um eine tiefe Kopie eines Graph-Objektes zu erzeugen. Ich möchte auf dieses Problem später unter Punkt 5 weiter eingehen. \\
+Eine zentrale Methode der Graph-Klasse ist ist die \texttt{collapseNeighbours(Vertex v)}-Methode, welche dafür sorgt, dass der Graph so verändert wird, dass alle Kanten des Vertex v zu seinen Nachbarn gelöscht werden, alle Kanten der Nachbarn zu dritten Knoten auf v übertragen werden und die Nachbarn zuletzt gelöscht werden. Dazu habe ich eine weitere Version der \texttt{setEdge()}-Methode implementiert, welche zwei Vertex-Objekte (v und den zu entfernenden Nachbarn) entgegen nimmt und die Kanten auf v überträgt. Dazu wird vorher überprüft ob schon eine Verbindung im Value von v hinterlegt ist, und wenn nicht wird die Kante in beiden \glqq Richtungen\grqq{} angelegt. Zum Schluss wird der zu entfernende Knoten selbst entfernt. 
 
 \subsection{Move}
-Introduce and discuss your implementation of the Move class.
+Ziel der Move-Klasse ist es Objekte erzeugen zu können, welche als \glqq Verlauf\grqq{} der Lösungswege des Spieles gespeichert werden können und jeweils den Graph vor und nach einem \glqq Zug\grqq{} und den entsprechenden Vertex speichern der zum kollabieren der Nachbarn gewählt wurde. Um dies zu Erreichen wird dem Konstruktor ein Graph übergeben, welcher den Graph vor einem Zug darstellt und der Vertex-Objekt, welcher den zu kollabierende Knoten darstellt. In der \texttt{getGraphAfter()}-Methode wird zuerst ein neuer Graph erzeugt und dann, mit hilfe der \texttt{clone()}-Methode der Graph-Klasse eine Tiefe Kopie des übergebenen Graphen mit der HashMap und allen ArrayLists erzeugt. Dieser kopierte Graph wird nun mit der \texttt{collapseNeighbours(Vertex)}-Methode der Graph-Klasse und dem ausgewählten Knoten manipuliert. Dieser Graph wird anschließend übergeben.
 
 \subsection{Catalan}
-Introduce and discuss your implementation of the Catalan class.
+Die Catalan-Klasse hat bei mir als Klassenparameter eine neues Objekt vom Typ ArrayList<ArrayList<Move>>, in welcher alle möglichen Lösungen des Graphen gesammelt werden. Die innere Listen enthalten alle Move-Objekte welche zu einer Lösung (es bleibt nur ein Vertex über) führt.\\
+Die Funktionalität der \texttt{solve()}- und \texttt{makeMove()}-Methode werden in 2.4.1 erläutert. Ich möchte hier noch an dieser Stelle noch auf die \texttt{sort()}- und \texttt{main}-Methode eingehen:\\
+Der \texttt{sort()}-Methode wird als Parameter die in \texttt{solve} erstellte ArrayList <ArrayList<Move>> übergeben und gibt eine Liste ArrayList<Move> als beste Lösung nach der Aufgabenstellung zurück. Dazu nehme ich die erste Liste als Referenz und Vergleiche alle anderen Listen Stelle für Stelle mit dieser. Wenn eine Liste optimaler ist, wird diese von da an als Referenzobjekt verwendet. So wird am Ende die diese Liste übergeben.\\
+In der \texttt{main}-Methode verwende ich beim Aufruf, dass ich dieser einen String-Array übergeben kann, welcher der Pfad der GML-Datei ist. In der Methode gibt es nur einen print-Befehl der den Ausgabekopf druckt, verknüpft mit einem neuen Catalan-Objekt, welches direkt sie \texttt{solve}-Methode, mit dem Pfad aus dem \texttt{main}-Aufruf. Da \texttt{solve} eine ArrayListe zurück gibt wird hier erst der allgemeine \texttt{toString}-Methode der Liste und dann die überschriebene \texttt{toString}-Methode der Move-Klasse aufgerufen und ausgegeben.
 
 \subsubsection{Solution}
-Discuss in detail how you solved the game of Catalan (ie. the \texttt{solve()} method).
+Ich habe als Lösungsstrategie der \texttt{solve}-Methode einen Rekursiven Ansatz gewählt, da ich hier mit überschaubarem Aufwand eine effiziente Skalierung erreichen kann.\\
+Die \texttt{solve}-Methode nimmt den Datei-Pfad entgegen und legt zuerst den ursprünglichen Graphen an, indem es ein neuen Graph erzeugt und die \texttt{readGraphFromFile}-Methode mit dem Pfad ausführt.\\
+Die eigendliche rekursive Implementierung habe ich über die Methode \texttt{makeMove} realisiert. Diese nimmt eine ArrayListe<Move> und einen Graphen entgegen und prüft als erstes die Exit-Bedingung mit einer if-Abfrage, ob der Graph gelöst ist. Es wird geprüft ob der Graph nur noch aus einem Knoten besteht, wenn ja, wird die übergebene Liste der \glqq Sammlung\grqq{} von Lösungen im Klassenparameter von Catalan hinzugefügt. Wenn es mehr als einen Knoten gibt wird in \texttt{else} in den rekursiven Teil der Methode übergegangen. Hier werden alle Knoten des Graphen durchgegangen und geprüft ob sie 3 Nachbarn haben. Wenn dies der Fall ist wird ein neues Move-Objekt erzeugt, welches diesen Knoten und den aktuellen Graphen enthält. Danach erstelle ich eine neue Liste als Kopie des aktuellen Move-Verlaufes und füge den neuen Move hinzu. Mit dieser Liste und dem output von \texttt{move.getGraphAfter()} rufe ich nun die Methode \texttt{makeMove} wieder auf. Wenn kein Knoten drei Nachbarn hat, also der Graph auf diesem weg nicht lösbar ist läuft die Funktion ins leere.
 
 \section{Programming Principles}
-Discuss which programming principles you used, where you used them, and why.
+\subsubsection*{KISS}
+Ich habe beim schreiben des Codes versucht die Methoden so übersichtlich und so kurz wie möglich zu halten. Daher habe ich einiges an Hilfsmethoden verwendet um die Übersichtbarkeit zu erhöhen und an einigen stellen auf streams verzichtet, da diese den Code unübersichtlicher gemacht hätten als mehrere verschachtelte und eingerückte Schleifen.
 
-\section{Additional Functionality}
-You can delete this section if you did not add any additional functionality.
+\subsection*{Single Responsibility Principle (SRP)}
+Ich habe versucht in meiner Lösung streng auf die Trennung der einzelnen Funktionalitäten der Klassen zu achten. Dies bedeutet jede Klasse kapselt seine eigene Logik und ich kann auch einzeln getestet und verändert werden.
+
+\subsection*{Sicherheit}
+Jede Methode und jede Klassenvariable ist nur so offen wie sie sein müssen. Abgesehen von den vorgaben sind alle Hilfsmethoden private, wenn sie nur von der eigenen Klasse verwendet werden.
 
 \section{Challenges}
-Discuss the challenges and/or bugs you faced and how you overcame them.
+\subsection{Referenzen}
+Mein größtes Problem bestand darin, eine tiefe Kopie eines Graphen-Objektes zu erzeugen, welches die \texttt{getGraphAfter()}-Methode zurückgeben kann. Zuerst hatte ich das Problem, dass ich immer nur den ersten Lösungsansatz erhalten habe, da ich zwar ein neues Objekt erstellt habe, aber die HashMap nicht des neuen Objektes immer noch auf die ursprüngliche referenziert war. Hier habe ich dann das Interface \texttt{Cloneable} in der Graph-Klasse eingerichtet und mit dieser die \texttt{colne}-Methode überschrieben, so dass eine sichere tiefe Kopie von Graph erzeugt wird mit einer neuen HashMap. Diese HashMap fülle ich noch mit neuen Vertex- und ArrayList-Objekten, indem ich mit einer \texttt{for}-Schleife durch die ursprüngliche HashMap gehe. Mit dieser Methode kann ich nun in der Move-Klasse einen komplett neuen, veränderten Graphen erzeugen der keine Überschneidungen in den Referenzen mit dem ursprünglichen Graphen hat.
 
 \end{document}
-
