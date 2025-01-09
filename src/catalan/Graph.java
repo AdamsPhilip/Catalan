@@ -92,7 +92,7 @@ public class Graph implements Cloneable{
     }
 
     // ist implementiert, da in der Spezifikation gefordert, wird aber nicht Verwendet
-                    private Boolean areNeighbours(Vertex u, Vertex v){
+                    public Boolean areNeighbours(Vertex u, Vertex v){
                         for (Vertex v2 : edges.keySet()) {
                             if (v2.equals(u) && this.edges.get(v2).contains(v)) {
                                 return true;
