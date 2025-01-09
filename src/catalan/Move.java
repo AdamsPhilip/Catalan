@@ -15,6 +15,7 @@ public class Move {
         return this.SelectedVertex;
     }
 
+    // ist implementiert, da in der Spezifikation gefordert, wird aber nicht Verwendet
     public Graph getGraphBefore() {
         return this.graphBefore;
     }
@@ -24,10 +25,10 @@ public class Move {
         try {
             graphColne = (Graph) this.graphBefore.clone();
         } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
+            System.out.println("Clone not supported");
         }
         assert graphColne != null;
-        this.graphAfter = graphColne.collapseNeighbours(this.SelectedVertex);
+        this.graphAfter = graphColne.collapseNeighbours(this.SelectedVertex); // erstellt die Veränderung nach einem Zug im Graphen
         return this.graphAfter;
     }
 
