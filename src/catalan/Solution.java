@@ -28,10 +28,10 @@ public class Solution implements Comparable<Solution> {
                continue;
            }
            if (this.getIDFromMove(i) < o.getIDFromMove(i) ) {
-               return -1;
+               return 1;
            }
            if (this.getIDFromMove(i) > o.getIDFromMove(i) ) {
-               return 1;
+               return -1;
            }
        }
        return 0;
