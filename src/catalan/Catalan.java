@@ -1,10 +1,12 @@
 package catalan;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class Catalan {
 
-    private ArrayList<ArrayList<Move>> moves;
+    private ArrayList<Solution> moves;
     private final String path;
 
     public Catalan(String path) {
@@ -27,7 +29,7 @@ public class Catalan {
 
     private void doNextMove(ArrayList<Move> movesB, Graph graph) {
         if (graph.numVertices() == 1) { //Basisfall 1 der Rekursion, beendet einen lösbaren Zug
-            this.moves.add(new ArrayList<>(movesB));
+            this.moves.add(new Solution(movesB));
         }
         else {
             for (Vertex vertex : graph.getVertices()) {
@@ -41,25 +43,9 @@ public class Catalan {
         }
     }
 
-    private ArrayList<Move> sort(ArrayList<ArrayList<Move>> moves) {
-        ArrayList<Move> bestMoves = moves.get(0);
-        for (int i = 1; i < moves.size(); i++) {
-            for (int j = 0; j < moves.get(i).size(); j++) {
-                if (moves.get(i).get(j).getSelectedVertex().getID() == bestMoves.get(j).getSelectedVertex().getID()) {
-                    continue;
-                }
-                if (moves.get(i).get(j).getSelectedVertex().getID() < bestMoves.get(j).getSelectedVertex().getID()) {
-                    bestMoves = moves.get(i);
-                    break;
-                }
-
-                if (moves.get(i).get(j).getSelectedVertex().getID() > bestMoves.get(j).getSelectedVertex().getID()) {
-                    break;
-                }
-            }
-        }
-        moves.forEach(System.out::println);
-        return bestMoves;
+    private ArrayList<Move> sort(ArrayList<Solution> moves) {
+        Collections.sort(moves);
+        return moves.get(0).getMove();
     }
 
     private void testGraphForSolve(Graph graph) throws UnsolvableGameException {
