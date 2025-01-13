@@ -39,7 +39,7 @@ public class Graph implements Cloneable{
         return true;
     }
 
-    //Lege die Kanten aus der GML datei an
+    //Sucht die Zeilen der Kanten und initialisiert das Anlegen dieser
     private Boolean createEdge(ArrayList<String[]> gmlData){
         for(int i = 0; i < gmlData.size(); i++) {
             String[] line = gmlData.get(i);
