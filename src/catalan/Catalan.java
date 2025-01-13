@@ -54,8 +54,6 @@ public class Catalan {
     }
 
     public static void main(String[] args) throws UnsolvableGameException {
-       // System.out.println("Solution \n=============\n" + new Catalan("/home/philip/Dokumente/Studium/39-Inf-PP/Catalan/Code2/gml-files/level_56.gml").solve());
         System.out.println("\nSolution by Philip Adams \n=============\n" + new Catalan(args[0]).solve() + "\n");
-                // Startbar über Terminal: cd catalan (package): java -cp . catalan.Catalan /home/philip/Dokumente/Studium/39-Inf-PP/Catalan/Code2/gml-files/level_56.gml
     }
 }
