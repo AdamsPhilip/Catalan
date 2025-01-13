@@ -3,7 +3,7 @@ package catalan;
 import java.util.ArrayList;
 
 public class Solution implements Comparable<Solution> {
-    private ArrayList<Move> solution;
+    private ArrayList<Move> solution; //alle Moves eines Lösungsweges
 
     public Solution(ArrayList<Move> solution) {
         this.solution = solution;
@@ -18,7 +18,7 @@ public class Solution implements Comparable<Solution> {
         return this.solution.get(i).getSelectedVertex().getID();
     }
 
-    public ArrayList<Move> getMove(){
+    public ArrayList<Move> getMoves(){
         return this.solution;
     }
 

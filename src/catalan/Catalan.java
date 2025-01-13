@@ -44,7 +44,7 @@ public class Catalan {
 
     private ArrayList<Move> getBestSolution() {
         Collections.sort(this.solutions);
-        return this.solutions.get(0).getMove();
+        return this.solutions.get(0).getMoves();
     }
 
     private void testGraphForSolve(Graph graph) throws UnsolvableGameException {
