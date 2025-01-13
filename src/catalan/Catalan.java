@@ -5,11 +5,11 @@ import java.util.Collections;
 
 public class Catalan {
 
-    private ArrayList<Solution> moves;
+    private ArrayList<Solution> solutions;
     private final String path;
 
     public Catalan(String path) {
-        this.moves = new ArrayList<>();
+        this.solutions = new ArrayList<>();
         this.path = path;
     }
 
@@ -20,15 +20,15 @@ public class Catalan {
         }
         testGraphForSolve(graph); // 1. Test auf lösbarkeit
         doNextMove(new ArrayList<>(), graph);
-        if (this.moves.isEmpty()) { // 2. Test auf lösbarkeit
+        if (this.solutions.isEmpty()) { // 2. Test auf lösbarkeit
             throw new UnsolvableGameException("Es gibt keine Lösung dieses Graphen!");
         }
-        return sort(this.moves);
+        return getBestSolution();
     }
 
     private void doNextMove(ArrayList<Move> movesB, Graph graph) {
         if (graph.numVertices() == 1) { //Basisfall 1 der Rekursion, beendet einen lösbaren Zug
-            this.moves.add(new Solution(movesB));
+            this.solutions.add(new Solution(movesB));
         }
         else {
             for (Vertex vertex : graph.getVertices()) {
@@ -42,9 +42,9 @@ public class Catalan {
         }
     }
 
-    private ArrayList<Move> sort(ArrayList<Solution> moves) {
-        Collections.sort(moves);
-        return moves.get(0).getMove();
+    private ArrayList<Move> getBestSolution() {
+        Collections.sort(this.solutions);
+        return this.solutions.get(0).getMove();
     }
 
     private void testGraphForSolve(Graph graph) throws UnsolvableGameException {
@@ -54,7 +54,6 @@ public class Catalan {
     }
 
     public static void main(String[] args) throws UnsolvableGameException {
-       // Catalan catalan = new Catalan("/home/philip/Dokumente/Studium/39-Inf-PP/Catalan/Code2/gml-files/impossible_graph1.gml");
        // System.out.println("Solution \n=============\n" + new Catalan("/home/philip/Dokumente/Studium/39-Inf-PP/Catalan/Code2/gml-files/level_56.gml").solve());
         System.out.println("\nSolution by Philip Adams \n=============\n" + new Catalan(args[0]).solve() + "\n");
        // System.out.println("Ways to solve: " + catalan.movesSize());

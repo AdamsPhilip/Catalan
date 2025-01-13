@@ -22,16 +22,12 @@ public class Solution implements Comparable<Solution> {
         return this.solution;
     }
 
+    //Vergleicht zwei Solution-Objekte miteinander
+    @Override
    public int compareTo(Solution o) {
        for (int i = 1; i < o.getSize(); i++) {
-           if (this.getIDFromMove(i) == o.getIDFromMove(i) ) {
-               continue;
-           }
-           if (this.getIDFromMove(i) < o.getIDFromMove(i) ) {
-               return 1;
-           }
-           if (this.getIDFromMove(i) > o.getIDFromMove(i) ) {
-               return -1;
+           if (!(this.getIDFromMove(i) == o.getIDFromMove(i))) { //--> True an der ersten Stelle, wo sich die Listen unterscheiden
+               return o.getIDFromMove(i) - this.getIDFromMove(i);
            }
        }
        return 0;
