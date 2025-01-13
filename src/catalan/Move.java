@@ -21,14 +21,14 @@ public class Move {
     }
 
     public Graph getGraphAfter() {
-        Graph graphColne = null;
+        Graph graphClone = null;
         try {
-            graphColne = (Graph) this.graphBefore.clone();
+            graphClone = (Graph) this.graphBefore.clone();
         } catch (CloneNotSupportedException e) {
             System.out.println("Clone not supported");
         }
-        assert graphColne != null;
-        this.graphAfter = graphColne.collapseNeighbours(this.SelectedVertex); // erstellt die Veränderung nach einem Zug im Graphen
+        assert graphClone != null;
+        this.graphAfter = graphClone.collapseNeighbours(this.SelectedVertex); // erstellt die Veränderung nach einem Zug im Graphen
         return this.graphAfter;
     }
 

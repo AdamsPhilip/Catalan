@@ -126,7 +126,7 @@ public class Graph implements Cloneable{
         return Objects.equals(edges, graph.edges);
     }
 
-    // überschreibt clone s. Texxt
+    // überschreibt clone s. Text
     @Override
     public Graph clone() throws CloneNotSupportedException{
         Graph g = (Graph) super.clone();
@@ -138,7 +138,7 @@ public class Graph implements Cloneable{
         return g;
     }
 
-    //Clont die ArrayList im Value
+    //clont die ArrayList im Value
     public ArrayList<Vertex> cloneVertices(Vertex u) {
         return this.edges.get(u).stream().map(v -> new Vertex(v.getID())).collect(Collectors.toCollection(ArrayList::new));
 

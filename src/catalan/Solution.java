@@ -13,7 +13,7 @@ public class Solution implements Comparable<Solution> {
         return this.solution.size();
     }
 
-    // gibt die ID des selectetVertex eines Moves zurück
+    // gibt die ID des selectedVertex eines Moves zurück
     private int getIDFromMove(int i){
         return this.solution.get(i).getSelectedVertex().getID();
     }

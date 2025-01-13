@@ -15,7 +15,7 @@ public class Catalan {
 
     public ArrayList<Move> solve() throws UnsolvableGameException {
         Graph graph = new Graph(); //erstellt leeren Graph
-        if (!graph.readGraphFromFile(this.path)){ //ruft die Methode zum lesen und erstellen des Graphen auf und testet, ob dies ordnungsgemäß Funktioniert
+        if (!graph.readGraphFromFile(this.path)){ //ruft die Methode zum Lesen und erstellen des Graphen auf und testet, ob dies ordnungsgemäß Funktioniert
             throw new UnsolvableGameException("Graph kann nicht gelesen werden");
         }
         testGraphForSolve(graph); // 1. Test auf lösbarkeit
@@ -56,7 +56,6 @@ public class Catalan {
     public static void main(String[] args) throws UnsolvableGameException {
        // System.out.println("Solution \n=============\n" + new Catalan("/home/philip/Dokumente/Studium/39-Inf-PP/Catalan/Code2/gml-files/level_56.gml").solve());
         System.out.println("\nSolution by Philip Adams \n=============\n" + new Catalan(args[0]).solve() + "\n");
-       // System.out.println("Ways to solve: " + catalan.movesSize());
                 // Startbar über Terminal: cd catalan (package): java -cp . catalan.Catalan /home/philip/Dokumente/Studium/39-Inf-PP/Catalan/Code2/gml-files/level_56.gml
     }
 }
